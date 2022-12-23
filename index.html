@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+    <head>
+		<title>JAY C. ANGUE WEBSITE </title>
+		<script src="./libraries/socket-io-client.js"></script>
+		<script src="./libraries/domlibrary.js"></script>
+		<style>
+			body{
+				text-align:center;
+			}
+			#view_inputs{
+				display: inline-block;
+			}
+			#view_zone{
+				display: inline-block;
+				width:100%;
+				margin-top:10px;
+			}
+			#view_iframe{
+				width:100%;
+			}
+
+			#view_name{
+				font-size:15px;
+			}
+			#view_button{
+				font-size:15px;
+				font-weight: bold;
+			}
+			
+			.bar_holder{
+				width:300px;
+				height:50px;
+				background-color: grey;
+				margin: 5px;
+			}
+		</style>
+    </head>
+    <body>
+		
+		<div id="view_inputs">
+			<input id="view_name"></input>
+			<button id="view_button" onclick="search()">VIEW</button>
+		</div>
+		<br>
+		<div id="view_zone"></div>
+
+	
+	<script>
+		//WINDOWS ON LOAD
+		window.onload = function(){
+			var x = window.innerHeight;
+			var y = x * 0.10;
+			var z = x - y;
+			dom.dat("view_iframe","height",z);
+			dom.dat("view_zone","height",z);
+		}
+
+		//GET ELEMENTS
+		var view_name = document.getElementById("view_name");
+
+		//CREATE IFRAME
+		dom.des("IFRAME","view_iframe","view_zone");
+		dom.dat("view_iframe","src","./interface/home/home.html");
+
+		function search(){
+			var search_input = view_name.value;
+				
+			if(search_input === ""){
+				dom.dat("view_iframe","src","./interface/home/home.html");
+			}else{
+				var txt1 = "./interface/";
+				var txt2 = "/";
+				var txt3 = ".html";
+				var txt4 = txt1.concat(search_input);
+				var txt5 = txt4.concat(txt2);
+				var txt6 = txt5.concat(search_input);
+				var txt7 = txt6.concat(txt3);
+				dom.dat("view_iframe","src",txt7);
+			};
+
+		};
+
+	</script>
+
+	</body>
+</html>
