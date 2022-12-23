@@ -1,0 +1,17 @@
+#maindivleft{
+    display: inline-block;
+    text-align: center;
+    background-color: red;
+    width:25%;
+    height:500px;
+    float:left;
+}
+#maindivright{
+    display: inline-block;
+    text-align: center;
+    background-color:blue;
+    width:75%;
+    height:500px;
+    float:right;
+    overflow: auto;
+}

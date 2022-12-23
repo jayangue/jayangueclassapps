@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+    <head>
+	    <title>JAY ANGUE CHAT</title>
+		<script src="../../libraries/socket-io-client.js"></script>
+		<script src="../../libraries/domlibrary.js"></script>
+		<link rel="stylesheet" type="text/css" href="jaychat.css"></link>
+    </head>
+    <body>
+		
+		<div id="maindivleft">
+			<h2 id="unique_id"> SAMPLE ID</h2>
+			<p>YOUR NAME</p>
+			<input style="margin:10px;" id="wa_name" type="text">
+			<p>GROUP CHAT NAME</p>
+			<input style="margin:10px" id="wa_target" type="text"></input>
+			<br>
+			<p>YOUR MESSAGE</p>
+			<textarea style="width:80%; height:100px; margin:10px" id="wa_message"></textarea>
+			</br>
+			<button id="wa_send_button" style= "padding:5px; font-size:15px; font-weight: bold;" onclick="wa_action_send()">SEND</button>
+		</div>
+
+		<div id="maindivright">
+			<p>GROUP CHAT NAME</p>
+			<input id="wa_view_target" type="text"></input>
+			<div id="message_area" style="border:solid 3px; padding:5px; margin:5px; overflow:auto;">
+				
+			</div>
+		</div>
+
+
+
+		<script>
+
+			window.onload = generate_unique_id();
+		
+			const socket = io();
+			var unique_id;
+			
+			//GET ELEMENTS
+			var wa_name = document.getElementById("wa_name");
+			var wa_target = document.getElementById("wa_target");
+			var wa_message = document.getElementById("wa_message");
+			var wa_view_target = document.getElementById("wa_view_target");
+
+			//SUBMIT
+			function wa_action_send() {
+				var txt1 = "(" + unique_id + ")" +  wa_name.value;
+				var txt2 = wa_target.value;
+				var txt3 = wa_message.value;
+
+				socket.emit('main_data',[txt2,txt1,txt3]);
+
+				dom.dgi("wa_send_button","CAN'T SEND"); 
+				dom.dat("wa_send_button","onclick","cantsend()");
+
+				setTimeout(function(){
+					dom.dgi("wa_send_button","SEND"); 
+					dom.dat("wa_send_button","onclick","wa_action_send()");
+				},2000);
+				
+			};
+
+			//GET DATA
+			var DATABANK = [];
+			
+			socket.on('main_data_collection',function(data){
+			
+				DATABANK = data;
+			
+			});
+
+			setInterval(wa_action_view,1000);
+
+			
+
+			function wa_action_view(){
+				
+				dom.dcl("message_area");
+
+				var view_target = wa_view_target.value;
+				var view_sender = "";
+				var view_message = "";
+
+				var i = 0;
+				for(; i < DATABANK.length; i++){
+					
+					if(DATABANK[i][0] === view_target ){
+						view_sender = DATABANK[i][1];
+						view_message = DATABANK[i][2];
+						view_data = view_sender + " -> " + view_message;
+
+						dom.dec("P","msg"+i,view_data,"message_area");
+
+					};
+					
+				};
+				
+			
+			};
+		
+			function wa_action_clear1(){
+				dom.dsv("wa_name") = " ";
+			}
+
+			function wa_action_clear2(){
+				dom.dsv("wa_target") = " ";
+			}
+
+			function wa_action_clear3(){
+				dom.dsv("wa_message") = " ";
+			}
+
+
+			function generate_unique_id(){
+				var uniqueid = document.getElementById("unique_id");
+				var id1 = Math.floor(Math.random() * 100);
+				var id2 = Math.floor(Math.random() * 100);
+				var id3 = Math.floor(Math.random() * 100);
+				var id4 = Math.floor(Math.random() * 100);
+				
+				var id1 = id1 + "~";
+				var id2 = id2 + "~";
+				var id3 = id3 + "~";
+				var id4 = id4;
+
+				unique_id = id1 + id2 + id3 + id4;
+				uniqueid.innerHTML = unique_id;
+
+			}
+
+			function cantsend(){}
+		</script>
+	</body>
+</html>

@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+	<head>
+		<title></title>
+		<script src="../../libraries/domlibrary.js"></script>
+		<style>
+			body
+			{
+				text-align:center;
+			}
+			#slide_menu
+			{
+				margin:15px;
+				display: flex;
+				flex-direction:row;
+				justify-content: center;
+				align-items: center;
+			}
+			/*=============================*/
+			#slide_search
+			{
+				margin:15px;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+			}
+			#slide_name
+			{
+				width:200px;
+				height:30px;
+				font-size: 35px;
+				margin: 20px;
+			}
+			#slide_view
+			{
+				width:150px;
+				height:30px;
+				font-size: 15px;
+				font-weight: bold;
+			}
+			/*============================*/
+			#slide_page
+			{
+				margin:15px;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+			}
+			#slide_page_input
+			{
+				width:75px;
+				height:30px;
+				font-size: 35px;
+				margin: 20px;
+			}
+			#slide_page_button
+			{
+				width:150px;
+				height:30px;
+				font-size: 15px;
+				font-weight: bold;
+			}
+			/*============================*/
+			#slide_nav
+			{
+				margin:15px;
+				display: flex;
+				flex-direction:row;
+				justify-content: center;
+				align-items: center;
+			}
+			#slide_page_text
+			{
+				font-size: 30px;
+				font-weight: bold;
+			}
+			#prev_button
+			{
+				width:200px;
+				height:100px;
+				font-size:30px;
+				font-weight:bold;
+				margin:20px;
+			}
+			#next_button
+			{
+				width:200px;
+				height:100px;
+				font-size:30px;
+				font-weight:bold;
+				margin:20px;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="slide_menu">
+			<div id="slide_search">
+				<input id="slide_name"></input>
+				<button id="slide_view" onclick="search_slide()">OPEN SLIDE</button>
+			</div>
+			<div id="slide_page">
+				<input id="slide_page_input"></input>
+				<button id="slide_page_button" onclick="open_slide()">VIEW SLIDE</button>
+			</div>
+		</div>
+		
+		<div>
+			<img id="main_img" src="empty.PNG"></img>
+		</div>
+		<div id="slide_nav">
+			<button onclick="prev();" id="prev_button"><h3>PREV</h3></button>
+			<h2 id="slide_page_text">0/0</h2>
+			<button onclick="next();" id="next_button"><h3>NEXT</h3></button>
+		</div>
+		<script>
+
+			var IMAGE_LINK = "images/Slide";
+			var IMAGE_TYPE = ".PNG";
+
+			var page_counter = 1;
+			var page_counter_default = 1;
+			var page_counter_max = 26;
+			var image_s = "";
+			var ww;
+			var wh;
+			var ww_s = "";
+			var wh_s = "";
+			var slide_name = document.getElementById("slide_name");
+			var slide_page = document.getElementById("slide_page_input");
+			var slide_page_text = document.getElementById("slide_page_text");
+
+			window.onload = function(){
+					page_counter = 1;
+					ww = window.innerWidth * 0.80;
+					wh = window.innerHeight * 0.30;
+				}
+
+			setInterval(function(){
+				ww_s = ww.toString() + "px";
+				wh_s = wh.toString() + "px"; 
+				dom.dat("main_img","width",ww_s);
+				dom.dat("main_img","height",wh_s);
+
+				image_s = IMAGE_LINK + page_counter.toString() + IMAGE_TYPE;
+				dom.dat("main_img","src",image_s)
+
+				slide_page_text.innerText = `${page_counter}/${page_counter_max}`;
+			},100);
+
+
+			function slide_database(slide_name)
+			{
+				//RETURN MAX NO. OF SLIDES
+				switch(slide_name)
+				{
+					case "filmap":
+						return 26;
+					break;
+					case "filmdev":
+						return 54;
+					break;
+					case "f9q1w4":
+						return 23;
+					break;
+					case "filmappre":
+						return 26;
+					break;
+					default:
+						return 1;
+					break;
+				}
+			}
+
+			function search_slide()
+			{
+				var search_input = slide_name.value;
+				search_input = search_input.toString();
+				search_input = search_input.toLowerCase();
+				
+				if(search_input === "" || search_input === null){
+					IMAGE_LINK = "empty/Slide";
+				}else{
+					IMAGE_LINK = search_input + "/Slide";
+				};
+
+				page_counter_max = slide_database(search_input);
+				page_counter = 1;
+			}
+
+			function open_slide()
+			{
+				
+				var slide_page_input = slide_page.value;
+				slide_page_input = slide_page_input.toString();
+				slide_page_input = parseInt(slide_page_input);
+
+				if(typeof(slide_page_input) == "number" && slide_page_input >= 1)
+				{
+					if(slide_page_input <= page_counter_max)
+					{
+						page_counter = slide_page_input;
+					}
+					
+				}
+				
+			}
+
+			function prev()
+			{
+				if(page_counter > page_counter_default)
+				{
+					page_counter--;
+				}
+				else if(page_counter <= page_counter_default)
+				{
+					page_counter = page_counter_max;
+				}
+			};
+
+			function next()
+			{
+				if(page_counter < page_counter_max)
+				{
+					page_counter++;
+				}
+				else if(page_counter >= page_counter_max)
+				{
+					page_counter = page_counter_default;
+				}
+			}
+
+		</script>
+	</body>
+</html>
